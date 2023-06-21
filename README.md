@@ -14,7 +14,7 @@ cargo install --path .
 
 ## Configuration
 
-Add to your `sxhkd` configuration file (`.config/sxhkd/sxhkdrc`) the following bindings:
+Add to your `sxhkd` configuration file (`~/.config/sxhkd/sxhkdrc`) the following bindings:
 
 ```
 super + ctrl + {F1,F2,F3,F4,F5,F6,F7,F8,F9,F10,F11,F12}
