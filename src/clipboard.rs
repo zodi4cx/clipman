@@ -2,7 +2,9 @@
 //! is supported in Wayland, this functionality should work there too, although it
 //! is currently untested.
 
-use arboard::{Error, SetExtLinux};
+use arboard::Error;
+#[cfg(target_os = "linux")]
+use arboard::SetExtLinux;
 use rmp_serde::Serializer;
 use serde::{Deserialize, Serialize};
 use std::{borrow::Cow, collections::HashMap, fs::File, io, path::Path};
@@ -51,11 +53,11 @@ impl From<ImageData> for ClipContent {
 ///
 /// ```rust
 /// use clipman::clipboard::{Clipboard, ClipContent};
-/// 
+///
 /// let mut clip = Clipboard::new();
 /// let test_data = "This is a test!".to_owned();
 /// clip.insert(1, test_data.clone());
-/// 
+///
 /// let content = clip.get(1).unwrap();
 /// assert_eq!(&ClipContent::Text(test_data), content);
 /// ```
@@ -123,26 +125,33 @@ pub fn get_clipboard() -> Result<ClipContent, Error> {
 /// # Panics
 ///
 /// This function may panic if access to the clipboard cannot be obtained.
-pub fn set_clipboard(data: &ClipContent) -> Result<(), Error>
-{
+#[cfg(target_os = "linux")]
+pub fn set_clipboard(data: &ClipContent) -> Result<(), Error> {
     let mut clipboard = arboard::Clipboard::new().expect("Can't access the clipboard");
-    if cfg!(target_os = "linux") {
-        match data {
-            ClipContent::Text(data) => clipboard.set().wait().text(data),
-            ClipContent::Image(data) => clipboard.set().wait().image(arboard::ImageData {
-                width: data.width,
-                height: data.height,
-                bytes: Cow::from(data.data.as_slice()),
-            }),
-        }
-    } else {
-        match data {
-            ClipContent::Text(data) => clipboard.set_text(data),
-            ClipContent::Image(data) => clipboard.set_image(arboard::ImageData {
-                width: data.width,
-                height: data.height,
-                bytes: Cow::from(data.data.as_slice()),
-            }),
-        }
+    match data {
+        ClipContent::Text(data) => clipboard.set().wait().text(data),
+        ClipContent::Image(data) => clipboard.set().wait().image(arboard::ImageData {
+            width: data.width,
+            height: data.height,
+            bytes: Cow::from(data.data.as_slice()),
+        }),
+    }
+}
+
+/// Sets the selected content into the system clipboard.
+///
+/// # Panics
+///
+/// This function may panic if access to the clipboard cannot be obtained.
+#[cfg(not(target_os = "linux"))]
+pub fn set_clipboard(data: &ClipContent) -> Result<(), Error> {
+    let mut clipboard = arboard::Clipboard::new().expect("Can't access the clipboard");
+    match data {
+        ClipContent::Text(data) => clipboard.set().wait().text(data),
+        ClipContent::Image(data) => clipboard.set().wait().image(arboard::ImageData {
+            width: data.width,
+            height: data.height,
+            bytes: Cow::from(data.data.as_slice()),
+        }),
     }
 }
