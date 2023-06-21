@@ -1,0 +1,18 @@
+[package]
+name = "clipman"
+version = "0.1.0"
+edition = "2021"
+authors = ["zodi4c <jcorreamarichal@gmail.com>"]
+description = "Simple clipboard management tool"
+keywords = ["clipboard", "manager"]
+readme = "README.md"
+repository = "https://github.com/zodi4cx/clipman/"
+license = "MIT"
+
+[dependencies]
+anyhow = "1.0.71"
+arboard = "3.2.0"
+clap = { version = "4.3.4", features = ["derive"] }
+notify-rust = "4.8.0"
+rmp-serde = "1.1.1"
+serde = { version = "1.0.164", features = ["derive"] }
