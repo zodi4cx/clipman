@@ -1,6 +1,6 @@
 # clipman
 
-Yet another simple keyboard manager, written in Rust. It is meant to be used with an X dameon such as [sxhkd](https://github.com/baskerville/sxhkd) for quick binding of clipboard values to hotkeys.
+Yet another simple keyboard manager. It is meant to be used with an X dameon such as [sxhkd](https://github.com/baskerville/sxhkd) for quick binding of clipboard values to hotkeys.
 
 ## Installation
 
