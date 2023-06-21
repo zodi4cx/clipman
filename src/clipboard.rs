@@ -147,8 +147,8 @@ pub fn set_clipboard(data: &ClipContent) -> Result<(), Error> {
 pub fn set_clipboard(data: &ClipContent) -> Result<(), Error> {
     let mut clipboard = arboard::Clipboard::new().expect("Can't access the clipboard");
     match data {
-        ClipContent::Text(data) => clipboard.set().wait().text(data),
-        ClipContent::Image(data) => clipboard.set().wait().image(arboard::ImageData {
+        ClipContent::Text(data) => clipboard.set_text(data),
+        ClipContent::Image(data) => clipboard.set_image(arboard::ImageData {
             width: data.width,
             height: data.height,
             bytes: Cow::from(data.data.as_slice()),
